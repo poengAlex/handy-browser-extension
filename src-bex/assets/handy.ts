@@ -41,7 +41,6 @@ export async function setScript(url: string) {
         }
 
     } catch (err) {
-        console.error(err);
         throw (err)
     }
 }

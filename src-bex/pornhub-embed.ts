@@ -12,6 +12,15 @@ import { setVideoPlayer } from './assets/player';
 let bridge: BexBridge;
 console.log('Starting pornhub-embed.ts');
 
+//Custom handler - bridge does not seem to work
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+    console.log('onMessage', message);
+    if (message.action === 'refresh') {
+        initPhEmbed()
+    }
+    return true;
+});
+
 function initPhEmbed() {
     console.log('initPhEmbed');
 
@@ -106,9 +115,9 @@ export default bexContent((_bridge) => {
     })
 
     //DOES NOT WORK!
-    bridge.on('video.refresh', videoRefresh)
-    bridge.off('video.refresh', videoRefresh)
+    // bridge.on('video.refresh', videoRefresh)
+    // bridge.off('video.refresh', videoRefresh)
 
-    initPhEmbed();
+    // initPhEmbed();
 
 })

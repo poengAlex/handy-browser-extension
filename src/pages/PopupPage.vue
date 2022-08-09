@@ -5,12 +5,6 @@
             <div id="handy-ui"></div>
         </div>
 
-        <q-banner v-if="state.tabChangeDetected" class="bg-warning text-black">
-            <template v-slot:avatar>
-                <q-icon name="warning" color="black" />
-            </template>
-            Tab change detected. Data might be out of sync. Refresh page to get back in sync.
-        </q-banner>
 
         <q-list padding>
 
@@ -62,7 +56,9 @@
                 <q-item-section>
                     <q-item-label>Script token<span v-if="scriptTokens.length > 1">s</span></q-item-label>
                     <q-item-label caption lines="2">
-                        Script found and set on your machine.
+                        <span v-if="state.scriptSet">Script found and set on your machine.</span>
+                        <span v-else-if="state.settingScript">Script found. Setting it on your device.</span>
+                        <span v-else>Script found, but not set on your device</span>
                     </q-item-label>
                 </q-item-section>
 
@@ -103,22 +99,12 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar'
 import * as HandySDK from '@ohdoki/handy-sdk';
-type VideoData = {
-    platform: string,
-    title: string,
-    url: string,
-}
-type BexState = {
-    settingScript: boolean,
-    searchingForScript: boolean,
-    scriptFound: boolean,
-    scriptTokenUrl: string,
-    tabUrl: string,
-    tabChangeDetected: boolean
-}
+import { BexState, VideoData } from 'src/components/models';
+
+
 
 const state = ref<BexState>({
     settingScript: false,
@@ -126,7 +112,7 @@ const state = ref<BexState>({
     scriptFound: false,
     scriptTokenUrl: '',
     tabUrl: '',
-    tabChangeDetected: false
+    scriptSet: false,
 })
 
 const scriptTokens = ref([]);

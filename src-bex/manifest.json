@@ -21,9 +21,11 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.pornhub.com/embed/*"
+        "<all_urls>"
       ],
-      "exclude_globs": [],
+      "exclude_globs": [
+        "https://www.pornhub.com/*"
+      ],
       "js": [
         "notify.js"
       ],
@@ -33,7 +35,7 @@
     },
     {
       "matches": [
-        "https://www.pornhub.com/embed/*"
+        "https://www.pornhub.com/*"
       ],
       "all_frames": true,
       "run_at": "document_idle",

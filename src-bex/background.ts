@@ -1,6 +1,7 @@
 import { bexBackground } from 'quasar/wrappers';
 import { connectHandy, hsspPause, hsspPlay, setScript } from './assets/handy'
 import { BexBridge } from '@quasar/app-vite';
+import { BexState, BexStatePart, VideoData } from 'src/components/models';
 
 
 
@@ -18,11 +19,6 @@ connectHandy();
  * retrigger parsing on tab change -> set video data
  */
 
-type VideoData = {
-  platform: string,
-  title: string,
-  url: string
-}
 
 const DEFAULT_VIDEO_DATA: VideoData = {
   platform: '',
@@ -32,23 +28,8 @@ const DEFAULT_VIDEO_DATA: VideoData = {
 
 let videoData: VideoData = DEFAULT_VIDEO_DATA;
 
-type BexStatePart = {
-  settingScript?: boolean,
-  searchingForScript?: boolean,
-  scriptFound?: boolean,
-  scriptTokenUrl?: string,
-  tabUrl?: string,
-  tabChangeDetected?: boolean
-}
 
-type BexState = {
-  settingScript: boolean,
-  searchingForScript: boolean,
-  scriptFound: boolean,
-  scriptTokenUrl: string,
-  tabUrl: string,
-  tabChangeDetected: boolean
-}
+
 
 const DEFAULT_BEX_STATE: BexState = {
   settingScript: false,
@@ -56,7 +37,6 @@ const DEFAULT_BEX_STATE: BexState = {
   scriptFound: false,
   scriptTokenUrl: '',
   tabUrl: '',
-  tabChangeDetected: false,
 }
 
 let bexState: BexState = DEFAULT_BEX_STATE;
@@ -72,7 +52,6 @@ declare module '@quasar/app-vite' {
     'video.set': [VideoData, never]
     'video.get': [never, VideoData]
     'video.update': [never, VideoData] //when the video data is changed
-    'video.refresh': [any, any] //when the video data is changed
 
     'videoplayer.playing': [{ currentTime: number }, never]
     'videoplayer.paused': [never, never]
@@ -100,51 +79,40 @@ function updateState(newData: BexStatePart) {
 
 async function restart() {
   chrome.browserAction.setBadgeText({ text: '' });
-  updateState({
-    tabChangeDetected: true
-  })
-  // videoData = DEFAULT_VIDEO_DATA;
 
-  // updateState(DEFAULT_BEX_STATE)
-  // if (!sendingRefresh) {
-  //   sendingRefresh = true;
-  //   console.log('video.refresh - STARTED');
+  videoData = DEFAULT_VIDEO_DATA;
+  updateState(DEFAULT_BEX_STATE)
 
-  //   // refreshData(bridge);
-  //   if (bridge !== undefined) {
-  //     const res = await bridge.send('video.refresh');
-  //     console.log('res:', res);
-  //   }
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    console.log('tabs:', tabs);
+    if (tabs.length > 0) {
+      updateState({ tabUrl: tabs[0].url as string })
+      chrome.tabs.sendMessage(tabs[0].id as number, { action: 'refresh' }, function (response) {
+        console.warn(response);
 
+      });
+    }
 
-  //   console.log('video.refresh - FINISHED');
-  //   sendingRefresh = false;
-  // }
+  });
+
 }
 
 // Send a message to the client based on something happening.
 chrome.tabs.onCreated.addListener(tab => {
   console.log('tabs.onCreated.addListener', tab);
-  // bridge.send('video.refresh');
-  // bridge.send('browserTabCreated', { tab })
 })
 
 chrome.tabs.onActivated.addListener(activeInfo => {
   console.log('tabs.onActivated. activeInfo:', activeInfo);
   restart();
-  // if (bridge !== undefined) bridge.send('video.refresh');
 
 })
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-  console.warn('tabs.onUpdated.addListener', tabId, changeInfo, tab);
+  console.log('tabs.onUpdated.addListener', tabId, changeInfo, tab);
   if (changeInfo.status === 'complete') {
-    //TRIGGER script refresh!
-
-    // restart();
-
+    restart();
   }
-  // bridge.send('browserTabCreated', { tab })
 })
 
 export default bexBackground((_bridge, allActiveConnections) => {
@@ -182,7 +150,6 @@ export default bexBackground((_bridge, allActiveConnections) => {
 
     updateState({
       searchingForScript: true,
-      tabChangeDetected: false
     })
 
 
@@ -191,6 +158,7 @@ export default bexBackground((_bridge, allActiveConnections) => {
       chrome.browserAction.setBadgeBackgroundColor({ color: 'orange' });
       updateState({
         searchingForScript: true,
+        scriptSet: false,
         settingScript: true,
         scriptFound: true,
         scriptTokenUrl: 'https://sweettecheu.s3.eu-central-1.amazonaws.com/test/ph5b130705d40d9.csv'
@@ -201,6 +169,7 @@ export default bexBackground((_bridge, allActiveConnections) => {
         bridge.send('showNotification', { text: 'script set', type: 'success' });
         updateState({
           settingScript: false,
+          scriptSet: true
         })
           ;
         // chrome.browserAction.setIcon({ path: '/icons/baseline_done_black_24dp.png' });
@@ -209,6 +178,9 @@ export default bexBackground((_bridge, allActiveConnections) => {
       } catch (err) {
         console.error(err);
         bridge.send('showNotification', { text: 'Failed to set script. ERR: ' + err, type: 'error' });
+        updateState({
+          settingScript: false,
+        })
       }
 
 
