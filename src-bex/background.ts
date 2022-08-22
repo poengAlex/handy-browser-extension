@@ -88,7 +88,8 @@ async function restart() {
     if (tabs.length > 0) {
       updateState({ tabUrl: tabs[0].url as string })
       chrome.tabs.sendMessage(tabs[0].id as number, { action: 'refresh' }, function (response) {
-        console.warn(response);
+        console.log('sendMessage on tab change. response');
+
 
       });
     }
