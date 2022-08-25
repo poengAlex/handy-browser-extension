@@ -23,9 +23,7 @@
       "matches": [
         "<all_urls>"
       ],
-      "exclude_globs": [
-        "https://www.pornhub.com/*"
-      ],
+      "exclude_globs": [],
       "js": [
         "notify.js"
       ],
@@ -35,12 +33,22 @@
     },
     {
       "matches": [
-        "https://www.pornhub.com/*"
+        "https://www.pornhub.com/view_video.php?viewkey=*",
+        "https://www.pornhub.com/embed/*"
       ],
       "all_frames": true,
       "run_at": "document_idle",
       "js": [
         "pornhub-embed.js"
+      ]
+    },
+    {
+      "matches": [
+        "http://localhost:9001/*",
+        "http://localhost:9001/#/videos/*"
+      ],
+      "js": [
+        "index-extra.js"
       ]
     }
   ],

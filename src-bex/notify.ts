@@ -4,12 +4,13 @@
 // More info: https://quasar.dev/quasar-cli/developing-browser-extensions/content-hooks
 import { bexContent } from 'quasar/wrappers'
 import background from './background';
+console.log('Starting notify.ts')
 
 let notifyTimer: number;
 function showNotify(text: string, type: 'warning' | 'error' | 'success') {
   clearTimeout(notifyTimer);
   console.log('(notify.ts)showNotify', text, type);
-
+  let timeout = 3000;
   let htmlEl = document.getElementById('handyNotify');
   if (htmlEl === null) {
     htmlEl = document.createElement('div');
@@ -18,14 +19,16 @@ function showNotify(text: string, type: 'warning' | 'error' | 'success') {
   }
   if (type === 'error') {
     htmlEl.style.backgroundColor = 'red'
+    timeout = 10000;
   } else if (type === 'warning') {
     htmlEl.style.backgroundColor = 'yellow'
+    htmlEl.style.color = 'black'
   } else if (type === 'success') {
     htmlEl.style.backgroundColor = 'green'
   }
   htmlEl.innerHTML = text;
   htmlEl.className = 'show';
-  notifyTimer = (setTimeout(function () { htmlEl!.className = htmlEl!.className.replace('show', ''); }, 3000) as unknown) as number;
+  notifyTimer = (setTimeout(function () { htmlEl!.className = htmlEl!.className.replace('show', ''); }, timeout) as unknown) as number;
 }
 
 (function () {
@@ -37,6 +40,16 @@ function showNotify(text: string, type: 'warning' | 'error' | 'success') {
 
 
 export default bexContent((bridge) => {
+  chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+    // console.log('onMessage', message);
+    if (message.action === 'notify') {
+      const { text, type } = message;
+      showNotify(text, type)
+      // console.warn('showNotification', message);
+    }
+    return true;
+  });
+  //DOES NOT WORK!
   bridge.on('showNotification', ({ data, respond }) => {
     console.log('(notify.ts) on showNotification:', data);
     showNotify((data as any).text, (data as any).type);

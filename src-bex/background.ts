@@ -1,8 +1,8 @@
 import { bexBackground } from 'quasar/wrappers';
-import { connectHandy, hsspPause, hsspPlay, setScript } from './assets/handy'
+import { connectHandy, hsspPause, hsspPlay, setScript, handy } from './assets/handy'
 import { BexBridge } from '@quasar/app-vite';
 import { BexState, BexStatePart, VideoData } from 'src/components/models';
-
+import { PartnerVideo, ScriptApiIndex } from 'app/SCRIPTAPIINDEX';
 
 
 
@@ -10,6 +10,7 @@ import { BexState, BexStatePart, VideoData } from 'src/components/models';
 const sendingRefresh = false;
 let bridge: BexBridge;
 
+let settingScriptData = false;
 console.log('Starting background.ts');
 connectHandy();
 
@@ -22,6 +23,8 @@ connectHandy();
 
 const DEFAULT_VIDEO_DATA: VideoData = {
   platform: '',
+  partnerId: '',
+  externalRef: '',
   title: '',
   url: ''
 }
@@ -41,6 +44,20 @@ const DEFAULT_BEX_STATE: BexState = {
 
 let bexState: BexState = DEFAULT_BEX_STATE;
 
+function sendNotify(text: string, type: 'warning' | 'error' | 'success') {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    console.log('tabs:', tabs);
+    if (tabs.length > 0) {
+      updateState({ tabUrl: tabs[0].url as string })
+      chrome.tabs.sendMessage(tabs[0].id as number, { action: 'notify', text, type }, function (response) {
+        console.log('sendMessage on tab change. response');
+
+
+      });
+    }
+
+  });
+}
 
 declare module '@quasar/app-vite' {
   interface BexEventMap {
@@ -58,6 +75,9 @@ declare module '@quasar/app-vite' {
 
     'state.update': [never, BexState] //when the bex data is changed
     'state.get': [never, BexState] //when the bex data is changed
+
+    'handy.connected': [string, never] //when handy is connected
+    'handy.key': [never, string | undefined] //get the key
 
     'showNotification': [never, { text: string, type: 'warning' | 'error' | 'success' }] //when the video data is change
 
@@ -78,6 +98,8 @@ function updateState(newData: BexStatePart) {
 }
 
 async function restart() {
+  console.log('restart');
+
   chrome.browserAction.setBadgeText({ text: '' });
 
   videoData = DEFAULT_VIDEO_DATA;
@@ -142,8 +164,15 @@ export default bexBackground((_bridge, allActiveConnections) => {
     respond(videoData);
   });
 
-  bridge.on('video.set', ({ data, respond }) => {
+
+  bridge.on('video.set', async ({ data, respond }) => {
+
     console.log('Setting video data', data);
+    if (settingScriptData) {
+      console.warn('Already settings script data - Skipping');
+      return;
+    }
+    settingScriptData = true;
     videoData = data;
     respond();
 
@@ -153,46 +182,95 @@ export default bexBackground((_bridge, allActiveConnections) => {
       searchingForScript: true,
     })
 
-
-    setTimeout(async () => { //DEBUG -> Check for the actual script through the API
+    try {
       chrome.browserAction.setBadgeText({ text: 'script' })
-      chrome.browserAction.setBadgeBackgroundColor({ color: 'orange' });
+
       updateState({
         searchingForScript: true,
-        scriptSet: false,
-        settingScript: true,
-        scriptFound: true,
-        scriptTokenUrl: 'https://sweettecheu.s3.eu-central-1.amazonaws.com/test/ph5b130705d40d9.csv'
+        // scriptTokenUrl: 'https://sweettecheu.s3.eu-central-1.amazonaws.com/test/ph5b130705d40d9.csv'
       })
-      try {
-        await setScript(bexState.scriptTokenUrl);
-        // bridge.send('video.updated', videoData);
-        bridge.send('showNotification', { text: 'script set', type: 'success' });
-        updateState({
-          settingScript: false,
-          scriptSet: true
-        })
-          ;
-        // chrome.browserAction.setIcon({ path: '/icons/baseline_done_black_24dp.png' });
+      const key = handy.getStoredKey();
+      console.log('key:', key);
 
-        chrome.browserAction.setBadgeBackgroundColor({ color: 'green' });
-      } catch (err) {
-        console.error(err);
-        bridge.send('showNotification', { text: 'Failed to set script. ERR: ' + err, type: 'error' });
-        updateState({
-          settingScript: false,
-        })
+      const apiIndex = new ScriptApiIndex({
+        HEADERS: {
+          Authorization: 'Bearer ' + key
+        },
+      });
+      const partnerVideo = await apiIndex.index.lookup(videoData.externalRef, videoData.partnerId);
+      console.log('partnerVideo:', partnerVideo);
+      if (partnerVideo === undefined) {
+        sendNotify('No script found on this video', 'warning');
+        chrome.browserAction.setBadgeBackgroundColor({ color: 'yellow' });
+      } else {
+        chrome.browserAction.setBadgeBackgroundColor({ color: 'orange' });
+        const scripts = await apiIndex.index.getVideoScripts(partnerVideo.partnerVideoId);
+        console.log('scripts:', scripts);
+        if (key === undefined || key === '') {
+          sendNotify('No connected Handy', 'warning');
+        } else if (scripts.length > 0) {
+
+          const script = scripts[0];
+          const token = await apiIndex.index.getTokenUrl(partnerVideo.partnerVideoId, script.scriptId)
+          console.log('token:', token);
+          updateState({
+            scriptFound: true,
+            searchingForScript: false,
+            settingScript: true,
+            scriptTokenUrl: token.url
+          })
+          sendNotify('script found', 'success');
+          const setScriptRes = await setScript(token.url as string);
+          console.log('setScriptRes:', setScriptRes);
+          sendNotify('script set', 'success');
+          chrome.browserAction.setBadgeBackgroundColor({ color: 'green' });
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      chrome.browserAction.setBadgeBackgroundColor({ color: 'red' });
+      let errorString = err;
+      if (typeof err === 'object') {
+        errorString = JSON.stringify(err);
       }
 
+      sendNotify('Failed to set script. Error: ' + errorString, 'error');
 
       console.log('script set complete');
-
-    }, 500);
+    }
+    updateState({
+      settingScript: false,
+    })
+    settingScriptData = false;
   });
 
   bridge.on('state.get', ({ respond }) => {
     console.log('state.get');
     respond(bexState);
+  });
+
+  //Send from the popup when the Handy is connected -> Do this to update the state in background to match the popup
+  bridge.on('handy.connected', async ({ data, respond }) => {
+    const connectionKey = data;
+    console.log('video.connected.connectionKey:', connectionKey);
+    respond();
+    try {
+      await connectHandy(connectionKey);
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        console.log('tabs:', tabs);
+        if (tabs.length > 0) {
+          const currentTab = tabs[0];
+          chrome.tabs.reload(currentTab.id as number);
+        }
+
+      });
+    } catch (err) { console.error(err) }
+
+
+  });
+
+  bridge.on('handy.key', ({ respond }) => {
+    respond(handy.getStoredKey());
   });
 
 

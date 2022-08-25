@@ -1,11 +1,3 @@
-export interface Todo {
-  id: number;
-  content: string;
-}
-
-export interface Meta {
-  totalCount: number;
-}
 
 export interface BexStatePart {
   settingScript?: boolean,
@@ -27,6 +19,8 @@ export interface BexState extends BexStatePart {
 
 export type VideoData = {
   platform: string,
+  partnerId: string,
+  externalRef: string,
   title: string,
   url: string,
 }

@@ -3,12 +3,14 @@
   "version": "0.0.1",
   "description": "A browser plugin that checks for videos in the webpage and set the corresponding script if found in the script database.",
   "productName": "Handy browser extension",
-  "author": "poengAlex <bbgruppen@outlook.com>",
+  "author": "handyAlexander <alexander@sweettech.no|>",
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./",
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "importApiIndex": "rimraf SCRIPTAPIINDEX && openapi --exportSchemas true --input https://scripts01.handyfeeling.com/api/script/index/v0/spec --output SCRIPTAPIINDEX --name ScriptApiIndex --indent 4",
+    "dev": "quasar dev -m bex"
   },
   "dependencies": {
     "@ohdoki/handy-sdk": "^2.1.13",
@@ -27,7 +29,9 @@
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^9.0.0",
+    "openapi-typescript-codegen": "^0.23.0",
     "prettier": "^2.5.1",
+    "rimraf": "^3.0.2",
     "typescript": "^4.5.4"
   },
   "engines": {
