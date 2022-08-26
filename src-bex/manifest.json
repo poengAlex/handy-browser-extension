@@ -21,7 +21,11 @@
   "content_scripts": [
     {
       "matches": [
-        "<all_urls>"
+        "http://localhost:9001/*",
+        "http://localhost:9000/*",
+        "https://index.handyfeeling.com/*",
+        "https://www.pornhub.com/view_video.php?viewkey=*",
+        "https://www.pornhub.com/embed/*"
       ],
       "exclude_globs": [],
       "js": [
@@ -45,22 +49,17 @@
     {
       "matches": [
         "http://localhost:9001/*",
-        "http://localhost:9001/#/videos/*"
+        "http://localhost:9000/*",
+        "https://index.handyfeeling.com/*"
       ],
       "js": [
         "index-extra.js"
       ]
     }
   ],
-  "permissions": [
-    "<all_urls>",
-    "storage",
-    "tabs",
-    "activeTab"
-  ],
+  "permissions": [],
   "web_accessible_resources": [
-    "*",
-    "<all_urls>"
+    "*"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';"
 }

@@ -1,5 +1,7 @@
+import { PartnerVideo } from 'app/SCRIPTAPIINDEX'
 
 export interface BexStatePart {
+  partnerVideo?: PartnerVideo,
   settingScript?: boolean,
   scriptSet?: boolean,
   searchingForScript?: boolean,

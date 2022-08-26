@@ -1,5 +1,5 @@
 /**
- * Handy assets
+ * Handy logic file
  */
 
 import * as HandySDK from '@ohdoki/handy-sdk';
@@ -35,9 +35,10 @@ export async function connectHandy(key: string | undefined = undefined) {
 
 export async function setScript(url: string) {
   console.log('setScript', url);
+  let resSetScript;
   if (!connected) await connectHandy();
   try {
-    const resSetScript = await handy.setScript(url);
+    resSetScript = await handy.setScript(url);
     console.log('resSetScript:', resSetScript);
     if (playStartTime !== 0) { //video was playing
       hsspPlay(Date.now() - playStartTime);
@@ -46,6 +47,7 @@ export async function setScript(url: string) {
   } catch (err) {
     throw (err)
   }
+  return resSetScript
 }
 
 export async function hsspPlay(currentTime: number) {
@@ -53,11 +55,15 @@ export async function hsspPlay(currentTime: number) {
   const state = handy.getState();
   console.log('state:', state);
   if (state.settingScript) {
-    playStartTime = Date.now() - currentTime;
+    playStartTime = Date.now() - currentTime; //store the playtime and set it when script is set complete
   } else {
     playStartTime = 0;
-    const resHsspPlay = await handy.hsspPlay(currentTime);
-    console.log('resHsspPlay:', resHsspPlay);
+    try {
+      const resHsspPlay = await handy.hsspPlay(currentTime);
+      console.log('resHsspPlay:', resHsspPlay);
+    } catch (err) { console.error(err) }
+
+
   }
 }
 

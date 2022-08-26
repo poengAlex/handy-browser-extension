@@ -1,41 +1,10 @@
-# Quasar App (quasar-plugin-1)
+# Handy browser plugin
 
-A Quasar Project
+This plugin is in BETA. Code and functionality still need to be optimized. Please inspect and review any security/privacy issues you notice.
 
-## Install the dependencies
-```bash
-yarn
-# or
-npm install
-```
+# How to run
+- npm i
+- npm run dev
+- Add the extension to your browser: https://quasar.dev/quasar-cli-webpack/developing-browser-extensions/build-commands
+- Reload the extension every time you do changes.
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
-quasar dev
-```
-
-
-### Lint the files
-```bash
-yarn lint
-# or
-npm run lint
-```
-
-
-### Format the files
-```bash
-yarn format
-# or
-npm run format
-```
-
-
-
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
