@@ -4,6 +4,18 @@
 
 import * as HandySDK from '@ohdoki/handy-sdk';
 
+
+//TODO: Need function inside the SDK.
+// const window = {
+//   localStorage: {}
+// }
+
+// // @ts-ignore
+// window.localStorage.getItem = async (key: string) => {
+//   console.warn('PIPED storage command');
+//   return (await chrome.storage.sync.get([key]))[key];
+// }
+
 export const handy = HandySDK.init();
 let connected = false;
 let playStartTime = 0;
@@ -11,10 +23,12 @@ let playStartTime = 0;
 export async function connectHandy(key: string | undefined = undefined) {
   console.log('connectHandy');
 
-  let connectionKey = handy.getStoredKey();
-  if (key !== undefined) {
-    connectionKey = key;
-  }
+
+  const { connectionKey } = await chrome.storage.sync.get(['connectionKey'])
+  // let connectionKey = handy.getStoredKey();
+  // if (key !== undefined) {
+  //   connectionKey = key;
+  // }
   if (connectionKey !== undefined) {
     try {
       const connectRes = await handy.connect(connectionKey);
@@ -45,7 +59,9 @@ export async function setScript(url: string) {
     }
 
   } catch (err) {
-    throw (err)
+    console.error(err);
+
+    throw ((err as any).message)
   }
   return resSetScript
 }

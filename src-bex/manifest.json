@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Handy browser extension",
   "version": "0.0.1",
   "icons": {
@@ -8,15 +8,12 @@
     "128": "icons/icon-128x128.png"
   },
   "options_page": "www/index.html#/options",
-  "browser_action": {
+  "action": {
     "default_popup": "www/index.html#/popup",
     "default_title": "Handy browser plugin"
   },
   "background": {
-    "scripts": [
-      "background.js"
-    ],
-    "persistent": false
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
@@ -57,9 +54,20 @@
       ]
     }
   ],
-  "permissions": [],
-  "web_accessible_resources": [
-    "*"
+  "permissions": [
+    "storage"
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';"
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "*"
+      ],
+      "matches": [
+        "*://*/*"
+      ]
+    }
+  ]
 }
