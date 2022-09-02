@@ -1,4 +1,5 @@
 # Handy browser plugin
+Enables playing videos in sync with a Handy for supported sites and videos
 
 This plugin is in BETA. Code and functionality still need to be optimized. Please inspect and review any security/privacy issues you notice.
 

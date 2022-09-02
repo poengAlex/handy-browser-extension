@@ -207,7 +207,7 @@ export default bexBackground((_bridge, allActiveConnections) => {
         },
       });
       const partnerVideo = await apiIndex.index.lookup(videoData.externalRef, videoData.partnerId);
-      console.log('partnerVideo:', partnerVideo);
+      console.log('Search complete. partnerVideo:', partnerVideo);
       if (partnerVideo === undefined) {
         sendNotify('No script found on this video', 'warning');
         setBadge('yellow');
