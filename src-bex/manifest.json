@@ -52,6 +52,14 @@
       "js": [
         "index-extra.js"
       ]
+    },
+    {
+      "matches": [
+        "https://thebenefitmonkey.com/members/scenes/*"
+      ],
+      "js": [
+        "benefit-monkey.js"
+      ]
     }
   ],
   "permissions": [
