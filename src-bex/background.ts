@@ -1,10 +1,10 @@
 import { bexBackground } from 'quasar/wrappers';
-import { connectHandy, hsspPause, hsspPlay, setScript, handy } from './assets/handy'
+import { connectHandy, hsspPause, hsspPlay, setScript } from './assets/handy'
 import { BexBridge } from '@quasar/app-vite';
 import { BexState, BexStatePart, VideoData } from 'src/components/models';
-import { PartnerVideo, ScriptApiIndex } from 'app/SCRIPTAPIINDEX';
+import { ScriptApiIndex } from 'app/SCRIPTAPIINDEX';
 
-const sendingRefresh = false;
+
 let bridge: BexBridge;
 
 let settingScriptData = false;
@@ -59,7 +59,7 @@ function sendNotify(text: string, type: 'warning' | 'error' | 'success') {
     if (tabs.length > 0) {
       updateState({ tabUrl: tabs[0].url as string })
       chrome.tabs.sendMessage(tabs[0].id as number, { action: 'notify', text, type }, function (response) {
-        console.log('sendMessage on tab change. response');
+        console.log('sendMessage on tab change. response', response);
       });
     }
   });
@@ -104,6 +104,12 @@ function updateState(newData: BexStatePart) {
   if (bridge !== undefined) bridge.send('state.updated', bexState);
 }
 
+async function getTabUrl() {
+  const queryOptions = { active: true, currentWindow: true };
+  const tabs = await chrome.tabs.query(queryOptions);
+  return tabs[0].url;
+}
+
 /**
  * Restart everything.
  * Usefull when the user changes tabs
@@ -116,15 +122,19 @@ async function restart() {
   videoData = DEFAULT_VIDEO_DATA;
   updateState(DEFAULT_BEX_STATE)
 
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+  chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
     console.log('tabs:', tabs);
     if (tabs.length > 0) {
-      updateState({ tabUrl: tabs[0].url as string })
+      const url = await getTabUrl();
+      console.log('url:', url);
+
+      updateState({ tabUrl: url })
       chrome.tabs.sendMessage(tabs[0].id as number, { action: 'refresh' }, function (response) {
-        console.log('sendMessage on tab change. response');
+        console.log('sendMessage on tab change. response', response);
       });
     }
   });
+
 }
 
 // Send a message to the client based on something happening.

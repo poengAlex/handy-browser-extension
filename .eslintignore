@@ -5,3 +5,6 @@
 /node_modules
 .eslintrc.js
 /src-ssr
+../handy-js
+# /src-bex/background.ts
+# /src-bex/assets/handy.ts

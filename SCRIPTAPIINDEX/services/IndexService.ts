@@ -1,9 +1,13 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { NewScriptComment } from '../models/NewScriptComment';
+import type { NewScriptRating } from '../models/NewScriptRating';
 import type { Partner } from '../models/Partner';
 import type { PartnerVideo } from '../models/PartnerVideo';
 import type { Script } from '../models/Script';
+import type { ScriptComment } from '../models/ScriptComment';
+import type { ScriptRating } from '../models/ScriptRating';
 import type { Tag } from '../models/Tag';
 import type { TokenURL } from '../models/TokenURL';
 import type { ULID } from '../models/ULID';
@@ -168,6 +172,88 @@ scriptId: ULID,
                 'partnerVideoId': partnerVideoId,
                 'scriptId': scriptId,
             },
+        });
+    }
+
+    /**
+     * Add a rating to a script
+     * Add a rating to a script
+     * @param partnerVideoId Video identifier
+     * @param scriptId Script identifier
+     * @param requestBody 
+     * @returns ScriptRating Script info
+     * @throws ApiError
+     */
+    public createScriptRating(
+partnerVideoId: ULID,
+scriptId: ULID,
+requestBody: NewScriptRating,
+): CancelablePromise<ScriptRating> {
+        return this.httpRequest.request({
+            method: 'POST',
+            url: '/videos/{partnerVideoId}/scripts/{scriptId}/rating',
+            path: {
+                'partnerVideoId': partnerVideoId,
+                'scriptId': scriptId,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * Get script comments
+     * Get script comments. Editor access required.
+     * @param partnerVideoId Video identifier
+     * @param scriptId Script identifier
+     * @param take Comment list limit
+     * @param skip Comment list offset
+     * @returns ScriptComment Script comments
+     * @throws ApiError
+     */
+    public getScriptComments(
+partnerVideoId: ULID,
+scriptId: ULID,
+take: number = 20,
+skip?: number,
+): CancelablePromise<ScriptComment> {
+        return this.httpRequest.request({
+            method: 'GET',
+            url: '/videos/{partnerVideoId}/scripts/{scriptId}/comments',
+            path: {
+                'partnerVideoId': partnerVideoId,
+                'scriptId': scriptId,
+            },
+            query: {
+                'take': take,
+                'skip': skip,
+            },
+        });
+    }
+
+    /**
+     * Create a script feedback comment.
+     * Create a script feedback comment.
+     * @param partnerVideoId Video identifier
+     * @param scriptId Script identifier
+     * @param requestBody 
+     * @returns ScriptComment Script comment
+     * @throws ApiError
+     */
+    public createScriptComment(
+partnerVideoId: ULID,
+scriptId: ULID,
+requestBody: NewScriptComment,
+): CancelablePromise<ScriptComment> {
+        return this.httpRequest.request({
+            method: 'POST',
+            url: '/videos/{partnerVideoId}/scripts/{scriptId}/comments',
+            path: {
+                'partnerVideoId': partnerVideoId,
+                'scriptId': scriptId,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
 

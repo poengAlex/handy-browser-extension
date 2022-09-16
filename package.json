@@ -3,17 +3,18 @@
   "version": "0.0.1",
   "description": "A browser plugin that checks for videos in the webpage and set the corresponding script if found in the script database.",
   "productName": "Handy browser extension",
-  "author": "handyAlexander <alexander@sweettech.no|>",
+  "author": "handyAlexander <alexander@sweettech.no>",
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./",
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "importApiIndex": "rimraf SCRIPTAPIINDEX && openapi --exportSchemas true --input https://scripts01.handyfeeling.com/api/script/index/v0/spec --output SCRIPTAPIINDEX --name ScriptApiIndex --indent 4",
+    "build": "quasar build -m bex",
     "dev": "quasar dev -m bex"
   },
   "dependencies": {
-    "@ohdoki/handy-sdk": "^2.1.16",
+    "@ohdoki/handy-sdk": "^2.1.17",
     "@quasar/extras": "^1.0.0",
     "events": "^3.3.0",
     "pinia-plugin-persistedstate": "^2.1.1",

@@ -6,12 +6,14 @@ import type { OpenAPIConfig } from './core/OpenAPI';
 import { FetchHttpRequest } from './core/FetchHttpRequest';
 
 import { IndexService } from './services/IndexService';
+import { VideoRequestsService } from './services/VideoRequestsService';
 
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest;
 
 export class ScriptApiIndex {
 
     public readonly index: IndexService;
+    public readonly videoRequests: VideoRequestsService;
 
     public readonly request: BaseHttpRequest;
 
@@ -29,5 +31,6 @@ export class ScriptApiIndex {
         });
 
         this.index = new IndexService(this.request);
+        this.videoRequests = new VideoRequestsService(this.request);
     }
 }

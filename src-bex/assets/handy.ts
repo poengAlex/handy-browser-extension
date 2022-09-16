@@ -3,6 +3,7 @@
  */
 
 import * as HandySDK from '@ohdoki/handy-sdk';
+// import * as HandySDK from '../../../handy-js/dist/handy.esm'
 
 
 //TODO: Need function inside the SDK.
@@ -16,12 +17,40 @@ import * as HandySDK from '@ohdoki/handy-sdk';
 //   return (await chrome.storage.sync.get([key]))[key];
 // }
 
-export const handy = HandySDK.init();
+export const handy = HandySDK.init({
+  localStorage: {
+    getItem: (key: string) => {
+      return new Promise((resolve, reject) => {
+        chrome.storage.local.get([key], (item) => {
+          if (item && typeof item === 'string') {
+            resolve(item)
+          } else {
+            reject(item)
+          }
+        });
+      });
+    },
+    setItem: (key: string, value: string) => {
+      return new Promise((resolve) => {
+        chrome.storage.local.set({ [key]: value }, () => {
+          resolve();
+        });
+      });
+    },
+    removeItem: (key: string) => {
+      return new Promise((resolve) => {
+        chrome.storage.local.remove([key], () => {
+          resolve();
+        });
+      });
+    }
+  }
+});
 let connected = false;
 let playStartTime = 0;
 
 export async function connectHandy(key: string | undefined = undefined) {
-  console.log('connectHandy');
+  console.log('connectHandy', key);
 
 
   const { connectionKey } = await chrome.storage.sync.get(['connectionKey'])

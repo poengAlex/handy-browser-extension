@@ -2,6 +2,7 @@
   "manifest_version": 3,
   "name": "Handy browser extension",
   "version": "0.0.1",
+  "description": "Browser extension that allows videos to play in sync with your Handy",
   "icons": {
     "16": "icons/icon-16x16.png",
     "48": "icons/icon-48x48.png",
@@ -63,7 +64,8 @@
     }
   ],
   "permissions": [
-    "storage"
+    "storage",
+    "tabs"
   ],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self';"

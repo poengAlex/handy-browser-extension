@@ -96,10 +96,12 @@
         <q-item-section>
           <q-item-label>Script token</q-item-label>
           <q-item-label caption lines="2">
-            No scripts found for this page/video. <a
+            No scripts found for this page/video.
+            <q-btn class="q-mt-sm" @click="requestVideoToBeScripted" color="primary">Request us to script it</q-btn>
+            <!-- <a
               :href="'mailto:alexander@sweettech.no?subject=Script request&body=Hi%0D%0A%0D%0AI would like you to script this.%0D%0A%0D%0A URL: [REPLACE WITH THE URL OF THE VIDEO]%0D%0A%0D%0A State data:%0D%0A' + JSON.stringify(state) + '%0D%0A%0D%0AVideo data:%0D%0A' + JSON.stringify(videoData)">
               Request us to script it
-            </a>
+            </a> -->
           </q-item-label>
         </q-item-section>
 
@@ -115,7 +117,7 @@
           <q-item-section>
             <q-item-label>Database data</q-item-label>
             <q-item-label caption v-for="(value, key) in state.partnerVideo" :key="key"><b>{{ key }}: </b>{{
-                value
+            value
             }}
             </q-item-label>
           </q-item-section>
@@ -150,6 +152,9 @@ import { useQuasar } from 'quasar'
 import * as HandySDK from '@ohdoki/handy-sdk';
 import { BexState, VideoData } from 'src/components/models';
 import { Handy } from '@ohdoki/handy-sdk/dist/handy';
+import { initApi, apiIndex } from '../logic/api-wrapper'
+import { createNotify, createNotifySuccess } from '../logic/utils'
+
 
 let handy: Handy;
 
@@ -188,8 +193,21 @@ async function connect() {
   connecting.value = true;
   try {
     keyOnConnected.value = connectionKey.value;
-    await handy.connect(connectionKey.value)
-    $q.bex.send('handy.connected', handy.getStoredKey() as string); //Set the key in background and refresh the page
+    const connected = await handy.connect(connectionKey.value)
+    debugConsole('connected: ' + connected);
+
+    const key = await handy.getStoredKey();
+    if ($q.bex) {
+      if (key === undefined) {
+        $q.bex.send('log', {
+          message: '(popup): Key is undefined'
+        })
+      } else {
+        $q.bex.send('handy.connected', key); //Set the key in background and refresh the page
+      }
+
+    }
+
   } catch (err) { console.error(err) }
   connecting.value = false;
 }
@@ -197,6 +215,42 @@ async function connect() {
 async function disconnect() {
   handy.disconnect();
   keyOnConnected.value = '-1';
+}
+
+function debugConsole(msg: string) {
+  if ($q.bex) {
+    $q.bex.send('log', {
+      message: '[popup]: ' + msg
+    });
+  } else {
+    console.log('debugLog. msg:', msg);
+  }
+
+
+}
+
+async function requestVideoToBeScripted() {
+  if (connectionKey.value === undefined || connectionKey.value === '') {
+    createNotify('Please connect your Handy')
+  } else if (!connected.value) {
+    createNotify('Please connect your Handy')
+  }
+  else {
+    initApi(connectionKey.value);
+    try {
+      const res = await apiIndex.videoRequests.createVideoRequest({
+        url: state.value.tabUrl
+      })
+      debugConsole('res: ' + res)
+
+      createNotifySuccess('Request sent')
+    } catch (err) {
+      console.error(err);
+      createNotify(err as string)
+    }
+
+  }
+
 }
 
 function downloadToken() {
@@ -214,6 +268,7 @@ const onVideoDataUpdate = ({ data, respond }: { data: VideoData, respond: () => 
   videoData.value = data;
   respond();
 }
+
 
 
 onBeforeUnmount(() => {
@@ -260,12 +315,15 @@ onMounted(async () => {
 
   } else {
     //DEBUG DATA
-    // videoData.value = {
-    //     'platform': 'pornhub',
-    //     'url': 'https://www.pornhub.com/view_video.php?viewkey=ph5b130705d40d9',
-    //     'title': 'Remy&#039;s cock control - Pornhub.com'
-    // }
+    videoData.value = {
+      externalRef: '',
+      partnerId: '',
+      'platform': 'pornhub',
+      'url': 'https://www.pornhub.com/view_video.php?viewkey=ph5b130705d40d9',
+      'title': 'Remy&#039;s cock control - Pornhub.com'
+    }
   }
+
 
 
   //TODO: Add UUI when bugs are fixed
@@ -288,7 +346,7 @@ onMounted(async () => {
     connected.value = false;
   })
 
-  const key = handy.getStoredKey()
+  const key = await handy.getStoredKey()
   if (key !== undefined) {
     connectionKey.value = key;
     try {
@@ -303,4 +361,5 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+
 </style>
