@@ -232,9 +232,11 @@ function debugConsole(msg: string) {
 async function requestVideoToBeScripted() {
   if (connectionKey.value === undefined || connectionKey.value === '') {
     createNotify('Please connect your Handy')
-  } else if (!connected.value) {
-    createNotify('Please connect your Handy')
   }
+  //REmoved since its cumbersome to wait for connection everytime you want to add a request
+  // else if (!connected.value) {
+  //   createNotify('Please connect your Handy')
+  // }
   else {
     initApi(connectionKey.value);
     try {
