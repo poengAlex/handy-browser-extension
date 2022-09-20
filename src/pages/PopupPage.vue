@@ -143,7 +143,7 @@
 
 
   </div>
-  <div class="full-width text-center text-caption">Sweet tech AS - &copy;2022</div>
+  <div class="full-width text-center text-caption">BETA version - Sweet tech AS - &copy;2022</div>
 </template>
 
 <script setup lang="ts">

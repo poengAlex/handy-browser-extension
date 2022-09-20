@@ -14,7 +14,7 @@
     "dev": "quasar dev -m bex"
   },
   "dependencies": {
-    "@ohdoki/handy-sdk": "^2.1.17",
+    "@ohdoki/handy-sdk": "^2.2.0",
     "@quasar/extras": "^1.0.0",
     "events": "^3.3.0",
     "pinia-plugin-persistedstate": "^2.1.1",

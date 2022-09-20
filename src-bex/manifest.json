@@ -23,7 +23,8 @@
         "http://localhost:9000/*",
         "https://index.handyfeeling.com/*",
         "https://www.pornhub.com/view_video.php?viewkey=*",
-        "https://www.pornhub.com/embed/*"
+        "https://www.pornhub.com/embed/*",
+        "https://thebenefitmonkey.com/members/scenes/*"
       ],
       "exclude_globs": [],
       "js": [
