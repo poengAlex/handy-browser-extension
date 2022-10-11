@@ -14,6 +14,7 @@ This plugin is in BETA. Code and functionality still need to be optimized. Pleas
     "https://pornhub.com/embed/*",
     "https://thebenefitmonkey.com",
     "https://index.handyfeeling.com/*",
+    "https://site-ma.brazzers.com"
 ## Soon
     "https://pornhub.com/view_video.php?viewkey=*",
     "https://pornhub.com/embed/*",
@@ -32,7 +33,12 @@ This plugin is in BETA. Code and functionality still need to be optimized. Pleas
     "https://pornhub.com",
     "https://unlimitedmuse.com",
     "https://vrbangers.com",
-    "https://brazzers.com",
     "https://badoinkvr.com",
     "https://vrhush.com",
     "https://wankzvr.com"
+
+
+# How to add a site
+- Make a .ts file in the src-bex folder
+- Add it to the manifest
+- Add it to the quasar.config.js
