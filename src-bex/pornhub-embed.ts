@@ -64,11 +64,16 @@ function initPhEmbed() {
   for (let i = 0; i < videoElements.length; i++) {
     const videoElement = videoElements[i];
     // if (videoElement.baseURI.includes('view_video')) {
-    if (videoElement.duration > 10000) {
-      console.log('Found correct video element');
-
+    if (!videoElement.classList.contains('lazyVideo') && videoElement.playsInline && !videoElement.controls) { //All other video elements seems to have lazyVideo class. On teh main video playsInline set to true and controls to false
       index = i
+      // console.log('videoElement. prop', videoElement.playsInline, videoElement.controls);
+
     }
+    // if (videoElement.duration > 10000) { //duration is not set on load - video is set after
+    //   console.log('Found correct video element');
+
+    //   index = i
+    // }
 
   }
   const videoPlayer = videoElements[index];
