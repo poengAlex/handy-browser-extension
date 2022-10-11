@@ -22,5 +22,8 @@ export const $Script = {
         metadata: {
     type: 'ScriptMetadata',
 },
+        access: {
+    type: 'ScriptAccessType',
+},
     },
 } as const;

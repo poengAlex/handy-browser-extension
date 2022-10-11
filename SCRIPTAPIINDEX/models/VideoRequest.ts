@@ -5,6 +5,7 @@
 import type { Entity } from './Entity';
 import type { ULID } from './ULID';
 import type { URL } from './URL';
+import type { VideoRequestMetadata } from './VideoRequestMetadata';
 import type { VideoRequestStatus } from './VideoRequestStatus';
 
 export type VideoRequest = (Entity & {
@@ -14,4 +15,5 @@ externalRef?: string;
 domain: string;
 status: VideoRequestStatus;
 votes: number;
+metadata?: VideoRequestMetadata;
 });

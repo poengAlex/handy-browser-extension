@@ -13,6 +13,9 @@ export const $ScriptComment = {
     type: 'ULID',
     isRequired: true,
 },
+        status: {
+    type: 'ScriptCommentStatus',
+},
     },
 }],
 } as const;

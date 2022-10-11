@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export const $VideoType = {
+export const $ScriptCommentStatus = {
     type: 'Enum',
 } as const;

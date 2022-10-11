@@ -30,6 +30,9 @@ export const $VideoRequest = {
     type: 'number',
     isRequired: true,
 },
+        metadata: {
+    type: 'VideoRequestMetadata',
+},
     },
 }],
 } as const;

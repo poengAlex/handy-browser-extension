@@ -5,6 +5,7 @@ import type { NewScriptComment } from '../models/NewScriptComment';
 import type { NewScriptRating } from '../models/NewScriptRating';
 import type { Partner } from '../models/Partner';
 import type { PartnerVideo } from '../models/PartnerVideo';
+import type { Performer } from '../models/Performer';
 import type { Script } from '../models/Script';
 import type { ScriptComment } from '../models/ScriptComment';
 import type { ScriptRating } from '../models/ScriptRating';
@@ -81,6 +82,7 @@ skip?: number,
      * Get a list of videos available to the current user
      * @param qt Video title query.
      * @param tf Tag filters
+     * @param pif Performer id filter.
      * @param pf Partner id filter.
      * @param take List limit
      * @param skip List offset
@@ -90,6 +92,7 @@ skip?: number,
     public getVideos(
 qt?: string,
 tf?: Array<string>,
+pif?: Array<ULID>,
 pf?: Array<ULID>,
 take: number = 100,
 skip?: number,
@@ -100,6 +103,7 @@ skip?: number,
             query: {
                 'qt': qt,
                 'tf': tf,
+                'pif': pif,
                 'pf': pf,
                 'take': take,
                 'skip': skip,
@@ -332,6 +336,63 @@ p?: string,
             query: {
                 'v': v,
                 'p': p,
+            },
+        });
+    }
+
+    /**
+     * Get a list of registered performers available to the current user.
+     * Get a list of registered performers available to the current user. User level access required.
+     * @param qn Performer name query.
+     * @param tf Tag filters
+     * @param pf Partner id filter.
+     * @param take Performer list limit
+     * @param skip List offset
+     * @returns Performer Available performers
+     * @throws ApiError
+     */
+    public getPerformers(
+qn?: string,
+tf?: Array<string>,
+pf?: Array<ULID>,
+take: number = 100,
+skip?: number,
+): CancelablePromise<Array<Performer>> {
+        return this.httpRequest.request({
+            method: 'GET',
+            url: '/performers',
+            query: {
+                'qn': qn,
+                'tf': tf,
+                'pf': pf,
+                'take': take,
+                'skip': skip,
+            },
+            errors: {
+                400: `Bad request.`,
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Resource not found.`,
+                500: `Internal server error`,
+            },
+        });
+    }
+
+    /**
+     * Get performer info
+     * Get performer info
+     * @param performerId Performer identifier
+     * @returns Performer Performer info
+     * @throws ApiError
+     */
+    public getPerformer(
+performerId: ULID,
+): CancelablePromise<Performer> {
+        return this.httpRequest.request({
+            method: 'GET',
+            url: '/performers/{performerId}',
+            path: {
+                'performerId': performerId,
             },
         });
     }
