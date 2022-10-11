@@ -39,7 +39,7 @@
 
       <q-item>
         <q-item-section top avatar>
-          <q-avatar color="primary" text-color="black" icon="movie" />
+          <q-avatar color="primary" text-color="white" icon="movie" />
         </q-item-section>
 
         <q-item-section v-if="videoData.title !== ''">
@@ -67,7 +67,7 @@
 
       <q-item v-if="state.scriptTokenUrl !== ''">
         <q-item-section top avatar>
-          <q-avatar class="cursor-pointer" @click="downloadToken()" color="primary" text-color="black" icon="download">
+          <q-avatar class="cursor-pointer" @click="downloadToken()" color="primary" text-color="white" icon="download">
             <q-tooltip>Download the script token</q-tooltip>
           </q-avatar>
         </q-item-section>
@@ -90,7 +90,7 @@
       </q-item>
       <q-item v-else>
         <q-item-section top avatar>
-          <q-avatar color="primary" text-color="black" icon="article" />
+          <q-avatar color="primary" text-color="white" icon="article" />
         </q-item-section>
 
         <q-item-section>
@@ -111,7 +111,7 @@
         <q-separator spaced inset="item" />
         <q-item>
           <q-item-section top avatar>
-            <q-avatar color="primary" text-color="black" icon="info" />
+            <q-avatar color="primary" text-color="white" icon="info" />
           </q-item-section>
 
           <q-item-section>
@@ -274,6 +274,8 @@ const onVideoDataUpdate = ({ data, respond }: { data: VideoData, respond: () => 
 
 
 onBeforeUnmount(() => {
+  console.log('$q.bex:', $q.bex);
+
   if ($q.bex) {
     $q.bex.off('state.updated', onStateUpdate);
     $q.bex.off('video.updated', onVideoDataUpdate);
