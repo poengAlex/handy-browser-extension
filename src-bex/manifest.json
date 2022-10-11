@@ -62,6 +62,15 @@
       "js": [
         "benefit-monkey.js"
       ]
+    },
+    {
+      "matches": [
+        "https://site-ma.brazzers.com/scene/*"
+      ],
+      "run_at": "document_idle",
+      "js": [
+        "brazzers.js"
+      ]
     }
   ],
   "permissions": [

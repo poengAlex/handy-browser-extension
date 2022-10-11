@@ -204,7 +204,8 @@ module.exports = configure(function (/* ctx */) {
         'notify',
         'pornhub-embed',
         'index-extra',
-        'benefit-monkey'
+        'benefit-monkey',
+        'brazzers'
       ],
 
       // extendBexScriptsConf (esbuildConf) {}
