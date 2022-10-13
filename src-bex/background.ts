@@ -8,6 +8,8 @@ import { ScriptApiIndex } from 'app/SCRIPTAPIINDEX';
 let bridge: BexBridge;
 
 let settingScriptData = false;
+let playCommandOnSettingScript = false;
+let playCommandOnSettingScriptTime = 0;
 console.log('Starting background.ts');
 connectHandy();
 
@@ -166,12 +168,21 @@ export default bexBackground((_bridge, allActiveConnections) => {
 
   bridge.on('videoplayer.playing', ({ data, respond }) => {
     console.log('video.playing', data);
-    hsspPlay(data.currentTime);
+    if (bexState.settingScript) {
+      console.warn('BEX is setting script. Play canceled.');
+      playCommandOnSettingScript = true;
+      playCommandOnSettingScriptTime = data.currentTime;
+
+    } else {
+      hsspPlay(data.currentTime);
+    }
+
     respond();
 
   });
   bridge.on('videoplayer.paused', ({ respond }) => {
     console.log('video.paused');
+    playCommandOnSettingScript = false;
     hsspPause();
     respond();
   });
@@ -241,6 +252,11 @@ export default bexBackground((_bridge, allActiveConnections) => {
           })
           sendNotify('script found', 'success');
           const setScriptRes = await setScript(token.url as string);
+          if (playCommandOnSettingScript) {
+            console.log('Script play buffered. Sending play now the script is set');
+            playCommandOnSettingScript = false;
+            hsspPlay(playCommandOnSettingScriptTime)
+          }
           console.log('setScriptRes:', setScriptRes);
           sendNotify('script set', 'success');
           updateState({
@@ -256,7 +272,7 @@ export default bexBackground((_bridge, allActiveConnections) => {
       if (typeof err === 'object') {
         errorString = JSON.stringify(err);
       }
-
+      playCommandOnSettingScript = false;
       sendNotify('Failed to set script. Error: ' + errorString, 'error');
 
       console.log('script set complete');

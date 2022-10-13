@@ -13,6 +13,7 @@
           Connected - key: {{ connectionKey }}
           <br>
           <q-btn flat @click="disconnect()" color="primary">Disconnect</q-btn>
+          <q-btn flat @click="resync()" :loading="syncing" color="primary">Resync</q-btn>
         </template>
         <template v-else>
           <q-input class="q-pl-sm q-pr-sm" label="Connection Key" v-model="connectionKey" @keydown.enter="connect(); ">
@@ -180,6 +181,7 @@ const connectionKey = ref('');
 const connected = ref(false);
 const connecting = ref(true);
 const keyOnConnected = ref('-1');
+const syncing = ref(false);
 
 const videoData = ref<VideoData>({
   externalRef: '',
@@ -215,6 +217,17 @@ async function connect() {
 async function disconnect() {
   handy.disconnect();
   keyOnConnected.value = '-1';
+}
+async function resync() {
+  syncing.value = true;
+  try {
+    const res = await handy.sync();
+    createNotifySuccess('Synced successfully')
+  } catch (err) {
+    console.error(err);
+    createNotify(err as string)
+  }
+  syncing.value = false;
 }
 
 function debugConsole(msg: string) {

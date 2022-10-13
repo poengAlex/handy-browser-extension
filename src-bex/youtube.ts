@@ -11,7 +11,8 @@
 import { BexBridge } from '@quasar/app-vite';
 import { bexContent } from 'quasar/wrappers'
 import { setVideoPlayer } from './assets/player';
-const PARTNERID = 'youtube.com';
+// const PARTNERID = 'youtube.com';
+const PARTNERID = 'brazzers.com';
 let bridge: BexBridge;
 console.log('Starting youtube.ts');
 
@@ -46,8 +47,8 @@ function initContentScript() {
   const queryString = window.location.search;
   console.log(queryString);
   const urlParams = new URLSearchParams(queryString);
-  const externalRef = urlParams.get('v');
-  // externalRef = '3853561';
+  let externalRef = urlParams.get('v');
+  externalRef = '3853561';
   console.log('externalRef:', externalRef);
 
 

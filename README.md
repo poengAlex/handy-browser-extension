@@ -42,3 +42,9 @@ This plugin is in BETA. Code and functionality still need to be optimized. Pleas
 - Make a .ts file in the src-bex folder
 - Add it to the manifest
 - Add it to the quasar.config.js
+
+# Deploy
+
+- npm run build
+- Delete the zip file created by quasar if it is rediculsy big
+- zip all the files
