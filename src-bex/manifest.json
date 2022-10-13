@@ -71,6 +71,15 @@
       "js": [
         "brazzers.js"
       ]
+    },
+    {
+      "matches": [
+        "https://www.youtube.com/watch*"
+      ],
+      "run_at": "document_idle",
+      "js": [
+        "youtube.js"
+      ]
     }
   ],
   "permissions": [

@@ -1,8 +1,8 @@
 /**
- * Script spesific for https://site-ma.brazzers.com/
+ * Script spesific for https://www.youtube.com/watch*
  *
  *
- * Example of a scripted video: https://site-ma.brazzers.com/scene/3853561/blacklight-booty
+ * Example of a scripted video: https://www.youtube.com/watch?v=aNFVpmfJLNs
  *
  */
 
@@ -11,9 +11,9 @@
 import { BexBridge } from '@quasar/app-vite';
 import { bexContent } from 'quasar/wrappers'
 import { setVideoPlayer } from './assets/player';
-const PARTNERID = 'brazzers.com';
+const PARTNERID = 'youtube.com';
 let bridge: BexBridge;
-console.log('Starting brazzers.ts');
+console.log('Starting youtube.ts');
 
 function checkForVideoPlayer() {
   const videoElements = document.querySelectorAll('video');
@@ -43,18 +43,16 @@ function initContentScript() {
   const videoUrl = location.href;
 
   //Extract the ref from the video url
-  //Example of the external ref is "3853561" from the url https://site-ma.brazzers.com/scene/3853561/blacklight-booty
-  const refReg = videoUrl.match(RegExp(/(\d+)/, 'i'));
-  console.log('refReg:', refReg);
-  let externalRef = '';
-  if (refReg !== null && refReg?.length > 1) {
-    externalRef = refReg[1];
-  }
+  const queryString = window.location.search;
+  console.log(queryString);
+  const urlParams = new URLSearchParams(queryString);
+  const externalRef = urlParams.get('v');
+  // externalRef = '3853561';
   console.log('externalRef:', externalRef);
 
 
   bridge.send('video.set', {
-    platform: 'brazzers',
+    platform: 'youtube',
     partnerId: PARTNERID,
     externalRef: externalRef,
     url: videoUrl,
@@ -74,6 +72,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 export default bexContent((_bridge) => {
   bridge = _bridge;
   bridge.send('log', {
-    message: 'brazzers.ts loaded'
+    message: 'youtube.ts loaded'
   })
 })
