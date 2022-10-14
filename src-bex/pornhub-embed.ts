@@ -165,12 +165,15 @@ export default bexContent((_bridge) => {
   // bridge.on('video.refresh', videoRefresh)
   // bridge.off('video.refresh', videoRefresh)
 
-  //NEED to load it manually since the tab-complete event will happen before the content script is injected.
-  console.log("window.location.toString().includes('/embed/')", window.location.toString().includes('/embed/'), window.location.toString());
+  if (window) {
+    //NEED to load it manually since the tab-complete event will happen before the content script is injected.
+    console.log("window.location.toString().includes('/embed/')", window.location.toString().includes('/embed/'), window.location.toString());
 
-  if (window.location.toString().includes('/embed/')) {
-    //The refresh message works ok on pornhub directly
-    initPhEmbed();
+    if (window.location.toString().includes('/embed/')) {
+      //The refresh message works ok on pornhub directly
+      initPhEmbed();
+    }
   }
+
 
 })
