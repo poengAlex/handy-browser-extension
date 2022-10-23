@@ -98,7 +98,9 @@
           <q-item-label>Script token</q-item-label>
           <q-item-label caption lines="2">
             No scripts found for this page/video.
-            <q-btn class="q-mt-sm" @click="requestVideoToBeScripted" color="primary">Request us to script it</q-btn>
+            <!-- <q-btn class="q-mt-sm" @click="requestVideoToBeScripted" color="primary">Request us to script it</q-btn> -->
+            <q-btn class="q-mt-sm" href="https://index.handyfeeling.com/#/request" color="primary">Request us to script
+              it</q-btn>
             <!-- <a
               :href="'mailto:alexander@sweettech.no?subject=Script request&body=Hi%0D%0A%0D%0AI would like you to script this.%0D%0A%0D%0A URL: [REPLACE WITH THE URL OF THE VIDEO]%0D%0A%0D%0A State data:%0D%0A' + JSON.stringify(state) + '%0D%0A%0D%0AVideo data:%0D%0A' + JSON.stringify(videoData)">
               Request us to script it
