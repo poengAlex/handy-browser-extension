@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Handy browser extension",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Browser extension that allows videos to play in sync with your Handy",
   "icons": {
     "16": "icons/icon-16x16.png",
@@ -24,7 +24,9 @@
         "https://index.handyfeeling.com/*",
         "https://www.pornhub.com/view_video.php?viewkey=*",
         "https://www.pornhub.com/embed/*",
-        "https://thebenefitmonkey.com/members/scenes/*"
+        "https://thebenefitmonkey.com/members/scenes/*",
+        "https://site-ma.brazzers.com/scene/*",
+        "https://www.youtube.com/watch*"
       ],
       "exclude_globs": [],
       "js": [
