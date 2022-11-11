@@ -10,6 +10,7 @@ let bridge: BexBridge;
 let settingScriptData = false;
 let playCommandOnSettingScript = false;
 let playCommandOnSettingScriptTime = 0;
+let playCommandOnSettingScriptSystemTime = 0;
 console.log('Starting background.ts');
 connectHandy();
 
@@ -172,6 +173,7 @@ export default bexBackground((_bridge, allActiveConnections) => {
       console.warn('BEX is setting script. Play canceled.');
       playCommandOnSettingScript = true;
       playCommandOnSettingScriptTime = data.currentTime;
+      playCommandOnSettingScriptSystemTime = Date.now();
 
     } else {
       hsspPlay(data.currentTime);
@@ -255,7 +257,8 @@ export default bexBackground((_bridge, allActiveConnections) => {
           if (playCommandOnSettingScript) {
             console.log('Script play buffered. Sending play now the script is set');
             playCommandOnSettingScript = false;
-            hsspPlay(playCommandOnSettingScriptTime)
+            const deltaT = Date.now() - playCommandOnSettingScriptSystemTime; //Add the time past since the buffered command.
+            hsspPlay(playCommandOnSettingScriptTime + deltaT)
           }
           console.log('setScriptRes:', setScriptRes);
           sendNotify('script set', 'success');
