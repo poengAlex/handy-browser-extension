@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Handy browser extension",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Browser extension that allows videos to play in sync with your Handy",
   "icons": {
     "16": "icons/icon-16x16.png",
