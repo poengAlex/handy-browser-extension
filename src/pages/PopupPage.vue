@@ -47,9 +47,9 @@
           <q-item-label>{{ videoData.title }}</q-item-label>
           <q-item-label caption>Partner id: {{ videoData.partnerId }}</q-item-label>
           <q-item-label caption>External ref: {{ videoData.externalRef }}</q-item-label>
-          <q-item-label caption lines="2">
+          <!-- <q-item-label caption lines="2">
             <a :href="videoData.url" target="_blank">{{ videoData.url }}</a>
-          </q-item-label>
+          </q-item-label> -->
         </q-item-section>
         <q-item-section v-else>
           <q-item-label></q-item-label>
@@ -98,7 +98,11 @@
           <q-item-label>Script token</q-item-label>
           <q-item-label caption lines="2">
             No scripts found for this page/video.
-            <q-btn class="q-mt-sm" @click="requestVideoToBeScripted" color="primary">Request us to script it</q-btn>
+            <!-- <q-btn class="q-mt-sm" @click="requestVideoToBeScripted" color="primary">Request us to script it</q-btn> -->
+            <!-- TODO: How to add this? Try not to link to handyfeeling -->
+            <q-btn v-if="false" class="q-mt-sm" href="https://www.ivdb.io/#/request" color="primary">Request
+              us to script
+              it</q-btn>
             <!-- <a
               :href="'mailto:alexander@sweettech.no?subject=Script request&body=Hi%0D%0A%0D%0AI would like you to script this.%0D%0A%0D%0A URL: [REPLACE WITH THE URL OF THE VIDEO]%0D%0A%0D%0A State data:%0D%0A' + JSON.stringify(state) + '%0D%0A%0D%0AVideo data:%0D%0A' + JSON.stringify(videoData)">
               Request us to script it
@@ -108,7 +112,7 @@
 
       </q-item>
 
-      <template v-if="state.partnerVideo !== undefined">
+      <template v-if="state.partnerVideo !== undefined && false">
         <q-separator spaced inset="item" />
         <q-item>
           <q-item-section top avatar>
@@ -118,7 +122,7 @@
           <q-item-section>
             <q-item-label>Database data</q-item-label>
             <q-item-label caption v-for="(value, key) in state.partnerVideo" :key="key"><b>{{ key }}: </b>{{
-            value
+                value
             }}
             </q-item-label>
           </q-item-section>

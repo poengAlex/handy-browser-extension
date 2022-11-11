@@ -1,6 +1,6 @@
 {
   "name": "handy-browser-extension",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "A browser plugin that checks for videos in the webpage and set the corresponding script if found in the script database.",
   "productName": "Handy browser extension",
   "author": "handyAlexander <alexander@sweettech.no>",
