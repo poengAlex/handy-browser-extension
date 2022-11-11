@@ -100,7 +100,7 @@
             No scripts found for this page/video.
             <!-- <q-btn class="q-mt-sm" @click="requestVideoToBeScripted" color="primary">Request us to script it</q-btn> -->
             <!-- TODO: How to add this? Try not to link to handyfeeling -->
-            <q-btn v-if="false" class="q-mt-sm" href="https://index.handyfeeling.com/#/request" color="primary">Request
+            <q-btn v-if="false" class="q-mt-sm" href="https://www.ivdb.io/#/request" color="primary">Request
               us to script
               it</q-btn>
             <!-- <a
@@ -122,7 +122,7 @@
           <q-item-section>
             <q-item-label>Database data</q-item-label>
             <q-item-label caption v-for="(value, key) in state.partnerVideo" :key="key"><b>{{ key }}: </b>{{
-            value
+                value
             }}
             </q-item-label>
           </q-item-section>
