@@ -22,11 +22,11 @@
         "http://localhost:9001/*",
         "http://localhost:9000/*",
         "https://index.handyfeeling.com/*",
+        "https://www.ivdb.io/*",
         "https://www.pornhub.com/view_video.php?viewkey=*",
         "https://www.pornhub.com/embed/*",
         "https://thebenefitmonkey.com/members/scenes/*",
         "https://site-ma.brazzers.com/scene/*",
-        "https://www.youtube.com/watch*"
       ],
       "exclude_globs": [],
       "js": [
@@ -51,7 +51,8 @@
       "matches": [
         "http://localhost:9001/*",
         "http://localhost:9000/*",
-        "https://index.handyfeeling.com/*"
+        "https://index.handyfeeling.com/*",
+        "https://www.ivdb.io/*"
       ],
       "js": [
         "index-extra.js"
