@@ -1,16 +1,24 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { BexBridge } from '@quasar/app-vite';
-let duration = 30; //video must be longer than 30sec
+const MIN_DURATION = 30;
+let duration = MIN_DURATION; //video must be longer than 30sec
 let playerSet: HTMLVideoElement
 let bridge: BexBridge;
+let interval: number;
 
-
-export function findAndSetVideoPlayer(bridgeIn: BexBridge) {
+export function findAndSetVideoPlayer(bridgeIn: BexBridge, forceRefresh = false) {
   console.log('findAndSetVideoPlayer()');
 
+  if (forceRefresh) { //Will trigger a new video player
+    duration = MIN_DURATION;
+  }
+
   bridge = bridgeIn;
+  clearInterval(interval);
   checkForPlayer();
-  setInterval(() => {
+  //@ts-ignore
+  interval = setInterval(() => {
     checkForPlayer();
   }, 1000);
 }
