@@ -1,5 +1,5 @@
 /**
- * Script spesific for pornhub site and pornhub embed videos
+ * Script specific for pornhub site and pornhub embed videos
  *
  *
  * Test script: https://sweettecheu.s3.eu-central-1.amazonaws.com/test/ph5b130705d40d9.funscript
@@ -21,103 +21,18 @@
 
 import { BexBridge } from '@quasar/app-vite';
 import { bexContent } from 'quasar/wrappers'
-import { setVideoPlayer } from './assets/player';
-const PARTNERID = 'pornhub.com';
+import { findAndSetVideoPlayer } from './assets/player_extractor';
+import { getQueryVariable } from './assets/utils';
+
 let bridge: BexBridge;
 console.log('Starting pornhub-embed.ts');
-
-
-
-function getQueryVariable(url: string, key: string) {
-  const query = url.split('?');
-  if (query.length === 0) {
-    return '';
-  }
-  const vars = query[1].split('&');
-  for (let i = 0; i < vars.length; i++) {
-    const pair = vars[i].split('=');
-    if (decodeURIComponent(pair[0]) == key) {
-      return decodeURIComponent(pair[1]);
-    }
-  }
-  console.log('Query variable %s not found', key);
-  return '';
-}
-
-
 
 function initPhEmbed() {
   console.log('initPhEmbed');
 
-
-  const player = document.getElementById('player');
-  console.log('player:', player);
-
-  const videoElements = document.querySelectorAll('video');
-  console.log('videoElements:', videoElements);
-  if (videoElements.length < 1) {
-    console.error('Could not found video player element!');
-    return;
-  }
-  console.log('location:', location);
-  let index = 0;
-  for (let i = 0; i < videoElements.length; i++) {
-    const videoElement = videoElements[i];
-    // if (videoElement.baseURI.includes('view_video')) {
-    if (!videoElement.classList.contains('lazyVideo') && videoElement.playsInline && !videoElement.controls) { //All other video elements seems to have lazyVideo class. On teh main video playsInline set to true and controls to false
-      index = i
-      // console.log('videoElement. prop', videoElement.playsInline, videoElement.controls);
-
-    }
-    // if (videoElement.duration > 10000) { //duration is not set on load - video is set after
-    //   console.log('Found correct video element');
-
-    //   index = i
-    // }
-
-  }
-  const videoPlayer = videoElements[index];
-  setVideoPlayer(videoPlayer, bridge);
-  // console.log('videoPlayer:', videoPlayer);
-  // document.body.innerHTML = ""; //remove everything
-
-
-  // const playButtons = document.getElementsByClassName('mgp_play');
-  // // console.log('playButtons:', playButtons);
-  // for (let index = 0; index < playButtons.length; index++) {
-  //   const playbutton = playButtons[index];
-  //   playbutton.addEventListener('click', event => {
-  //     console.log('Clicked play');
-  //     const videoElements = document.querySelectorAll('video');
-  //     console.log('videoElements:', videoElements);
-  //     // if (videoElements.length > 0) {
-  //     //   const videoPlayer = videoElements[0];
-  //     //   console.log('videoPlayer:', videoPlayer);
-  //     //   setVideoPlayer(videoPlayer, bridge);
-  //     // }
-  //     let index = 0;
-  //     for (let i = 0; i < videoElements.length; i++) {
-  //       const videoElement = videoElements[i];
-  //       // if (videoElement.baseURI.includes('view_video')) {
-  //       if (videoElement.duration > 100) {
-  //         console.log('Found correct video element');
-
-  //         index = i
-  //       }
-
-  //     }
-  //     const videoPlayer = videoElements[index];
-  //     console.log('videoPlayer:', videoPlayer);
-  //     setVideoPlayer(videoPlayer, bridge);
-  //   })
-
-  // }
-
-
+  findAndSetVideoPlayer(bridge);
   const title = document.title;
-  // console.log('title:', title);
-
-  const head = document.head || document.getElementsByTagName('head')[0]; //Browser compatebility (needed?)
+  const head = document.head || document.getElementsByTagName('head')[0]; //Browser compatibility (needed?)
   const links = head.getElementsByTagName('link');
   let videoUrl = '';
   for (let index = 0; index < links.length; index++) {
@@ -138,7 +53,7 @@ function initPhEmbed() {
 
     bridge.send('video.set', {
       platform: 'pornhub',
-      partnerId: PARTNERID,
+      partnerId: 'pornhub.com',
       externalRef: externalRef,
       url: videoUrl,
       title: title

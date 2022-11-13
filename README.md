@@ -14,10 +14,11 @@ This plugin is in BETA. Code and functionality still need to be optimized. Pleas
     "https://pornhub.com/embed/*",
     "https://thebenefitmonkey.com",
     "https://index.handyfeeling.com/*",
-    "https://site-ma.brazzers.com"
-## Soon
-    "https://pornhub.com/view_video.php?viewkey=*",
+    "https://www.ivdb.io/*",
+    "https://site-ma.brazzers.com",
+    "https://pornhub.com",
     "https://pornhub.com/embed/*",
+## Soon
     "https://littlecaprice-dreams.com",
     "https://handyfeeling.com",
     "https://thejerkoffgames.com",
@@ -30,7 +31,6 @@ This plugin is in BETA. Code and functionality still need to be optimized. Pleas
     "https://vrhush.com",
     "https://vrallure.com",
     "https://fuckpassvr.com",
-    "https://pornhub.com",
     "https://unlimitedmuse.com",
     "https://vrbangers.com",
     "https://badoinkvr.com",

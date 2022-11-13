@@ -10,32 +10,16 @@
 
 import { BexBridge } from '@quasar/app-vite';
 import { bexContent } from 'quasar/wrappers'
-import { setVideoPlayer } from './assets/player';
-// const PARTNERID = 'youtube.com';
-const PARTNERID = 'brazzers.com';
+import { findAndSetVideoPlayer } from './assets/player_extractor';
+
 let bridge: BexBridge;
 console.log('Starting youtube.ts');
-
-function checkForVideoPlayer() {
-  const videoElements = document.querySelectorAll('video');
-  console.log('videoElements:', videoElements);
-  if (videoElements.length < 1) {
-    console.warn('Could not found video player element! -waiting 1000ms to check again');
-    setTimeout(() => {
-      checkForVideoPlayer();
-    }, 1000);
-    return;
-  }
-  console.log('location:', location);
-  const videoPlayer = videoElements[0];
-  setVideoPlayer(videoPlayer, bridge);
-}
 
 function initContentScript() {
   console.log('initContentScript');
 
 
-  checkForVideoPlayer();
+  findAndSetVideoPlayer(bridge);
 
 
   const title = document.title;
@@ -48,13 +32,16 @@ function initContentScript() {
   console.log(queryString);
   const urlParams = new URLSearchParams(queryString);
   let externalRef = urlParams.get('v');
-  externalRef = '3853561';
+  // externalRef = '3853561';
   console.log('externalRef:', externalRef);
+  if (externalRef === null) {
+    externalRef = 'null';
+  }
 
 
   bridge.send('video.set', {
     platform: 'youtube',
-    partnerId: PARTNERID,
+    partnerId: 'youtube.com',
     externalRef: externalRef,
     url: videoUrl,
     title: title

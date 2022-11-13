@@ -1,11 +1,18 @@
 /**
  * This script handles all the video player events
+ *
+ * @deprecated: Use player_extractor
  */
 
 import { BexBridge } from '@quasar/app-vite';
 
 let playerSet = false;
 
+/**
+ * @deprecated: Use player_extractor
+ * @param player
+ * @param bridge
+ */
 export function setVideoPlayer(player: HTMLVideoElement, bridge: BexBridge) {
   console.log('setVideoPlayer', player);
   // player.controls = true; //Add this to the settings.

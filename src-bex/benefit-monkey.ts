@@ -10,8 +10,8 @@
 
 import { BexBridge } from '@quasar/app-vite';
 import { bexContent } from 'quasar/wrappers'
-import { setVideoPlayer } from './assets/player';
-const PARTNERID = 'thebenefitmonkey.com';
+import { findAndSetVideoPlayer } from './assets/player_extractor';
+
 let bridge: BexBridge;
 console.log('Starting benefit-monkey.ts');
 
@@ -19,16 +19,8 @@ console.log('Starting benefit-monkey.ts');
 function initContentScript() {
   console.log('initContentScript');
 
-  const videoElements = document.querySelectorAll('video');
-  // console.log('videoElements:', videoElements);
-  if (videoElements.length < 1) {
-    console.error('Could not found video player element!');
-    return;
-  }
-  console.log('location:', location);
-  const videoPlayer = videoElements[0];
-  setVideoPlayer(videoPlayer, bridge);
 
+  findAndSetVideoPlayer(bridge);
 
   const title = document.title;
   console.log('title:', title);
@@ -48,7 +40,7 @@ function initContentScript() {
 
   bridge.send('video.set', {
     platform: 'benefit-monkey',
-    partnerId: PARTNERID,
+    partnerId: 'thebenefitmonkey.com',
     externalRef: externalRef,
     url: videoUrl,
     title: title
