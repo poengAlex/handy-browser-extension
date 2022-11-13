@@ -7,6 +7,7 @@
 #handyNotify {
   visibility: hidden; /* Hidden by default. Visible on click */
   min-width: 250px; /* Set a default minimum width */
+  /* height: 50px; */
   margin-left: -125px; /* Divide value of min-width by 2 */
   background-color: #333; /* Black background color */
   color: #fff; /* White text color */
@@ -16,7 +17,7 @@
   position: fixed; /* Sit on top of the screen */
   z-index: 1; /* Add a z-index if needed */
   left: 50%; /* Center the snackbar */
-  bottom: 30px; /* 30px from the bottom */
+  top: 80vh; /* 30px from the bottom */
 }
 
 /* Show the snackbar when clicking on a button (class added with JavaScript) */
@@ -24,27 +25,47 @@
   visibility: visible; /* Show the snackbar */
   /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
   However, delay the fade out process for 2.5 seconds */
-  -webkit-animation: fadein 0.5s;
-  animation: fadein 0.5s;
+  /* -webkit-animation: fadein 0.5s;
+  animation: fadein 0.5s; */
+
+  animation: fadeInFromNone 0.5s ease-out;
+}
+
+
+@keyframes fadeInFromNone {
+  0% {
+      display: none;
+      opacity: 0;
+  }
+
+  1% {
+      display: block;
+      opacity: 0;
+  }
+
+  100% {
+      display: block;
+      opacity: 1;
+  }
 }
 
 /* Animations to fade the snackbar in and out */
 @-webkit-keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
+  from {bottom: 100vh; opacity: 0;}
+  to {top: 80vh; opacity: 1;}
 }
 
 @keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
+  from {bottom: 100vh; opacity: 0;}
+  to {top: 80vh; opacity: 1;}
 }
 
 @-webkit-keyframes fadeout {
-  from {bottom: 30px; opacity: 1;}
-  to {bottom: 0; opacity: 0;}
+  from {top: 80vh; opacity: 1;}
+  to {bottom: 100vh; opacity: 0;}
 }
 
 @keyframes fadeout {
-  from {bottom: 30px; opacity: 1;}
-  to {bottom: 0; opacity: 0;}
+  from {top: 80vh; opacity: 1;}
+  to {bottom: 100vh; opacity: 0;}
 }
