@@ -98,11 +98,13 @@
           <q-item-label>Script token</q-item-label>
           <q-item-label caption lines="2">
             No scripts found for this page/video.
-            <!-- <q-btn class="q-mt-sm" @click="requestVideoToBeScripted" color="primary">Request us to script it</q-btn> -->
-            <!-- TODO: How to add this? Try not to link to handyfeeling -->
-            <q-btn v-if="false" class="q-mt-sm" href="https://www.ivdb.io/#/request" color="primary">Request
-              us to script
-              it</q-btn>
+            <q-btn v-if="videoData.url !== undefined && videoData.url !== ''" class="q-mt-sm"
+              @click="requestVideoToBeScripted" color="primary">Request
+              us to
+              script it</q-btn>
+            <q-btn v-else class="q-mt-sm" href="https://www.ivdb.io/#/request" target="_blank" color="primary">Add a
+              request on ivdb.io
+            </q-btn>
             <!-- <a
               :href="'mailto:alexander@sweettech.no?subject=Script request&body=Hi%0D%0A%0D%0AI would like you to script this.%0D%0A%0D%0A URL: [REPLACE WITH THE URL OF THE VIDEO]%0D%0A%0D%0A State data:%0D%0A' + JSON.stringify(state) + '%0D%0A%0D%0AVideo data:%0D%0A' + JSON.stringify(videoData)">
               Request us to script it
@@ -258,7 +260,8 @@ async function requestVideoToBeScripted() {
     initApi(connectionKey.value);
     try {
       const res = await apiIndex.videoRequests.createVideoRequest({
-        url: state.value.tabUrl
+        // url: state.value.tabUrl
+        url: videoData.value.url
       })
       debugConsole('res: ' + res)
 
