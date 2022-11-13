@@ -202,8 +202,8 @@ module.exports = configure(function (/* ctx */) {
     bex: {
       contentScripts: [
         'notify',
-        'pornhub-embed',
         'index-extra',
+        'pornhub-embed',
         'benefit-monkey',
         'brazzers',
         'youtube'
