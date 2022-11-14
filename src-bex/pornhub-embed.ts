@@ -49,7 +49,7 @@ function initPhEmbed() {
   } else {
     console.log('videoUrl:', videoUrl);
     let externalRef = getQueryVariable(videoUrl, 'viewkey');
-    if (externalRef === null) externalRef = '';
+    if (externalRef === null || externalRef === '') externalRef = 'UNKNOWN';
 
     bridge.send('video.set', {
       platform: 'pornhub',
