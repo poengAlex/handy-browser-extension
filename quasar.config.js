@@ -206,7 +206,8 @@ module.exports = configure(function (/* ctx */) {
         'pornhub-embed',
         'benefit-monkey',
         'brazzers',
-        'youtube'
+        'youtube',
+        'youtube-embed'
       ],
 
       // extendBexScriptsConf (esbuildConf) {}
